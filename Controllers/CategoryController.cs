@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CostMSWebAPI.Controllers;
 
-// [Authorize]
+[Authorize]
 [ApiController]
 [Route("api/category")]
 public class CategoryController : ControllerBase
