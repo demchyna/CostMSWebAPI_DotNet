@@ -67,7 +67,7 @@ builder.Services.AddCors(options =>
         corsBuilder.WithOrigins("http://localhost:4200")
             .AllowAnyMethod()
             .AllowAnyHeader()
-            .WithExposedHeaders("Authorization")
+            .WithExposedHeaders("Authorization", "Test")
             .AllowCredentials();
     });
     options.AddPolicy("ProdPolicy", (corsBuilder) =>
@@ -98,20 +98,7 @@ builder.Services.AddScoped<ITariffService, TariffService>();
 builder.Services.AddScoped<IUnitService, UnitService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddHeaderPropagation(options => options
-    .Headers.Add("Test", context =>
-    {
-        var claims = context.HttpContext.User.Claims;
-        foreach (var claim in claims)
-        {
-            Console.WriteLine("Claim : " + claim.Type + " -> " + claim.Value);
-        }
-        return "";
-    }));
-
 var app = builder.Build();
-
-app.UseHeaderPropagation();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -130,8 +117,6 @@ app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// app.HandleExceptions();
-
 app.UseExceptionHandler(exceptionHandler =>
 {
     exceptionHandler.Run(async httpContext =>
@@ -140,9 +125,7 @@ app.UseExceptionHandler(exceptionHandler =>
 
         IExceptionHandlerFeature? exceptionHandlerFeature = httpContext.Features
                 .Get<IExceptionHandlerFeature>();
-
-        Console.WriteLine("Exception type : " + exceptionHandlerFeature?.Error);
-
+        
         if (exceptionHandlerFeature?.Error is DataNotFoundException)
         {
             await ExceptionHandlerHelper.HandleException(httpContext, exceptionHandlerFeature, 404);
@@ -175,6 +158,8 @@ app.UseExceptionHandler(exceptionHandler =>
         }
     });
 });
+
+app.UseJwtPropagation();
 
 app.MapControllers();
 

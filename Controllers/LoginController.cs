@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
+using CostMSWebAPI.Utils;
 
 namespace CostMSWebAPI.Controllers;
 
@@ -58,29 +59,10 @@ public class LoginController : ControllerBase
                     PropertyNamingPolicy = new LowerCaseNamingPolicy()
                 }), 
                 JsonClaimValueTypes.JsonArray));
-            JwtSecurityToken jwtToken = GetJwtToken(authClaims);
+            JwtSecurityToken jwtToken = JwtSecurityTokenHelper.GetToken(authClaims, _configuration);
             Response.Headers.Add("Authorization", "Bearer " + new JwtSecurityTokenHandler().WriteToken(jwtToken));
             return Ok();
         }
         return Unauthorized();
-    }
-
-    private JwtSecurityToken GetJwtToken(IList<Claim> authClaims)
-    {
-        SymmetricSecurityKey authSigningKey = new(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? ""));
-
-        JwtSecurityToken jwtToken = new (
-            issuer: _configuration["JWT:ValidIssuer"],
-            audience: _configuration["JWT:ValidAudience"],
-            expires: DateTime.Now.AddHours(1),
-            claims: authClaims,
-            signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha512)
-        );
-        return jwtToken;
-    }
-    
-    private class LowerCaseNamingPolicy : JsonNamingPolicy
-    {
-        public override string ConvertName(string name) => name.ToLower();
     }
 }
