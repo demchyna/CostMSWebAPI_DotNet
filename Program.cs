@@ -117,49 +117,8 @@ app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseExceptionHandler(exceptionHandler =>
-{
-    exceptionHandler.Run(async httpContext =>
-    {
-        httpContext.Response.ContentType = "application/json";
-
-        IExceptionHandlerFeature? exceptionHandlerFeature = httpContext.Features
-                .Get<IExceptionHandlerFeature>();
-        
-        if (exceptionHandlerFeature?.Error is DataNotFoundException)
-        {
-            await ExceptionHandlerHelper.HandleException(httpContext, exceptionHandlerFeature, 404);
-            return;
-        }
-        if (exceptionHandlerFeature?.Error is NoDataException)
-        {
-            await ExceptionHandlerHelper.HandleException(httpContext, exceptionHandlerFeature, 417);
-            return;
-        }
-        if (exceptionHandlerFeature?.Error is ArgumentNullException)
-        {
-            await ExceptionHandlerHelper.HandleException(httpContext, exceptionHandlerFeature, 418);
-            return;
-        }
-        if (exceptionHandlerFeature?.Error is IncorrectDataException)
-        {
-            await ExceptionHandlerHelper.HandleException(httpContext, exceptionHandlerFeature, 422);
-            return;
-        }
-        if (exceptionHandlerFeature?.Error is ConflictDataException)
-        {
-            await ExceptionHandlerHelper.HandleException(httpContext, exceptionHandlerFeature, 409);
-            return;
-        }
-        if (exceptionHandlerFeature?.Error != null)
-        {
-            await ExceptionHandlerHelper.HandleException(httpContext, exceptionHandlerFeature, 400);
-            return;
-        }
-    });
-});
-
 app.UseJwtPropagation();
+app.UseErrorHandler();
 
 app.MapControllers();
 
