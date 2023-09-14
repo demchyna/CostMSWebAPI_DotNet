@@ -1,17 +1,17 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using CostMSWebAPI.DTOs;
 using CostMSWebAPI.Models;
 using CostMSWebAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 using CostMSWebAPI.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CostMSWebAPI.Controllers;
 
+[AllowAnonymous]
 [ApiController]
 [Route("")]
 public class LoginController : ControllerBase

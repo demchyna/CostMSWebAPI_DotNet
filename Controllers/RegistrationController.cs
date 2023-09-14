@@ -1,10 +1,11 @@
 ﻿using CostMSWebAPI.Models;
 using CostMSWebAPI.Services;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CostMSWebAPI.Controllers;
 
+[AllowAnonymous]
 [ApiController]
 [Route("")]
 public class RegistrationController : ControllerBase

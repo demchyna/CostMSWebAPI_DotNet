@@ -3,6 +3,7 @@ using CostMSWebAPI;
 using CostMSWebAPI.DALs;
 using CostMSWebAPI.DALs.Impls;
 using CostMSWebAPI.Data;
+using CostMSWebAPI.DTOs;
 using CostMSWebAPI.Exceptions;
 using CostMSWebAPI.Services;
 using CostMSWebAPI.Services.Impls;
@@ -63,12 +64,13 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AuthenticationDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(options =>
     {
         options.SaveToken = true;
@@ -83,6 +85,16 @@ builder.Services.AddAuthentication(options =>
                 Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"] ?? ""))
         };
     });
+
+// builder.Services.AddAuthorization(options =>
+// {
+//     options.AddPolicy("CreateCategory", policy =>
+//     {
+//         policy.RequireRole("ADMIN");
+//         policy.RequireRole("USER")
+//             .RequireAssertion(handler => null);
+//     });
+// });
 
 // builder.Services.AddTransient(_ =>
 //     new MySqlConnection(builder.Configuration.GetConnectionString("Default")));
