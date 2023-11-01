@@ -31,14 +31,11 @@ jobs:
       run: dotnet test --no-build --verbosity normal
 
     - name: Generate Semantic Version
-      id: bump
-      uses: zwaldowski/match-label-action@v4
+      uses: K-Phoen/semver-release-action@master
       with:
-        allowed: major,minor,patch
-    - uses: zwaldowski/semver-release-action@v3
-      with:
-        bump: ${{ steps.bump.outputs.match }}
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        release_branch: master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #      id: versioning
 #      uses: PaulHatch/semantic-version@v5.3.0
 #      with:
