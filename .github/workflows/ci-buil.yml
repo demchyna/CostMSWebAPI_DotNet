@@ -37,4 +37,3 @@ jobs:
         major_pattern: "BREAKING CHANGE:"
         minor_pattern: "feat:"
         version_format: "${major}.${minor}.${patch}-prerelease${increment}"
-        debug: true
