@@ -40,4 +40,4 @@ jobs:
         version_format: "${major}.${minor}.${patch}-prerelease${increment}"
         debug: true
 
-    - run: echo "${{ steps.versioning.outputs.current_commit }}"
+    - run: echo "${{ steps.versioning.outputs.version_tag }}"
