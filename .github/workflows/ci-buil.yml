@@ -32,19 +32,11 @@ jobs:
 
     - name: Generate Semantic Version
       id: versioning
-      uses: K-Phoen/semver-release-action@master
+      uses: PaulHatch/semantic-version@v5.3.0
       with:
-        release_branch: master
-        release_strategy: none
-        tag: 0.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        tag_prefix: "v"
+        major_pattern: "BREAKING CHANGE:"
+        minor_pattern: "feat:"
+        version_format: "${major}.${minor}.${patch}-prerelease${increment}"
 
-    - run: echo "${{ steps.versioning.outputs.tag }}"
-
-#      id: versioning
-#      uses: PaulHatch/semantic-version@v5.3.0
-#      with:
-#        major_pattern: "BREAKING CHANGE:"
-#        minor_pattern: "feat:"
-#        version_format: "${major}.${minor}.${patch}-prerelease${increment}"
+    - run: echo "${{ steps.versioning.outputs.version_tag }}"
