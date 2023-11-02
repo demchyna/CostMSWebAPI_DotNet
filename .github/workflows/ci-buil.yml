@@ -39,4 +39,6 @@ jobs:
         minor_pattern: "feat:"
         version_format: "${major}.${minor}.${patch}-prerelease${increment}"
         debug: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - run: echo "${{ steps.versioning.outputs.version_tag }}"
