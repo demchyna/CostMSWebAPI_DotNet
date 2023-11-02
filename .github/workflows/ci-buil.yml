@@ -38,6 +38,7 @@ jobs:
         major_pattern: "BREAKING CHANGE:"
         minor_pattern: "feat:"
         bump_each_commit: true
+        bump_each_commit_patch_pattern: "fix:"
         version_format: "${major}.${minor}.${patch}-prerelease${increment}"
         debug: true
       env:
